@@ -15,8 +15,9 @@
 		001C81791D37508700542432 /* TextTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C81751D37508700542432 /* TextTableViewController.swift */; };
 		001C817A1D37508700542432 /* QandATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C81761D37508700542432 /* QandATableViewController.swift */; };
 		001C817B1D37508700542432 /* QandAAccessoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C81771D37508700542432 /* QandAAccessoryTableViewController.swift */; };
-		001C817E1D37514300542432 /* CloudQandAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C817D1D37514300542432 /* CloudQandAViewController.swift */; };
 		001C81811D37593D00542432 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 001C81801D37593D00542432 /* CloudKit.framework */; };
+		001C81871D37F51500542432 /* AllQandAsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C81861D37F51500542432 /* AllQandAsTableViewController.swift */; };
+		001C81891D37F58D00542432 /* CloudQandATableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 001C81881D37F58D00542432 /* CloudQandATableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,9 +31,10 @@
 		001C81751D37508700542432 /* TextTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextTableViewController.swift; sourceTree = "<group>"; };
 		001C81761D37508700542432 /* QandATableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QandATableViewController.swift; sourceTree = "<group>"; };
 		001C81771D37508700542432 /* QandAAccessoryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QandAAccessoryTableViewController.swift; sourceTree = "<group>"; };
-		001C817D1D37514300542432 /* CloudQandAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudQandAViewController.swift; sourceTree = "<group>"; };
 		001C817F1D37593200542432 /* Pollster.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Pollster.entitlements; sourceTree = "<group>"; };
 		001C81801D37593D00542432 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		001C81861D37F51500542432 /* AllQandAsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllQandAsTableViewController.swift; sourceTree = "<group>"; };
+		001C81881D37F58D00542432 /* CloudQandATableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudQandATableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,7 +72,8 @@
 				001C817F1D37593200542432 /* Pollster.entitlements */,
 				001C81621D374FBA00542432 /* AppDelegate.swift */,
 				001C81661D374FBA00542432 /* Main.storyboard */,
-				001C817D1D37514300542432 /* CloudQandAViewController.swift */,
+				001C81861D37F51500542432 /* AllQandAsTableViewController.swift */,
+				001C81881D37F58D00542432 /* CloudQandATableViewController.swift */,
 				001C817C1D37508D00542432 /* Supporting Files */,
 			);
 			path = Pollster;
@@ -169,10 +172,11 @@
 			files = (
 				001C81791D37508700542432 /* TextTableViewController.swift in Sources */,
 				001C817A1D37508700542432 /* QandATableViewController.swift in Sources */,
-				001C817E1D37514300542432 /* CloudQandAViewController.swift in Sources */,
 				001C817B1D37508700542432 /* QandAAccessoryTableViewController.swift in Sources */,
 				001C81781D37508700542432 /* CloudKitExtensions.swift in Sources */,
+				001C81871D37F51500542432 /* AllQandAsTableViewController.swift in Sources */,
 				001C81631D374FBA00542432 /* AppDelegate.swift in Sources */,
+				001C81891D37F58D00542432 /* CloudQandATableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

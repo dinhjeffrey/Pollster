@@ -9,7 +9,7 @@
 import UIKit
 import CloudKit
 
-class CloudQandAViewController: QandATableViewController {
+class CloudQandATableViewController: QandATableViewController {
     
     var ckQandARecord: CKRecord {
         get {
@@ -53,73 +53,73 @@ class CloudQandAViewController: QandATableViewController {
         }
     }
     
-        private func retryAfterError(error: NSError?, withSelector selector: Selector) {
-            if let retryInterval = error?.userInfo[CKErrorRetryAfterKey] as? NSTimeInterval {
-                dispatch_async(dispatch_get_main_queue()) {
-                    NSTimer.scheduledTimerWithTimeInterval(
-                        retryInterval,
-                        target: self,
-                        selector: selector,
-                        userInfo: nil,
-                        repeats: false
-                    )
-                }
+    private func retryAfterError(error: NSError?, withSelector selector: Selector) {
+        if let retryInterval = error?.userInfo[CKErrorRetryAfterKey] as? NSTimeInterval {
+            dispatch_async(dispatch_get_main_queue()) {
+                NSTimer.scheduledTimerWithTimeInterval(
+                    retryInterval,
+                    target: self,
+                    selector: selector,
+                    userInfo: nil,
+                    repeats: false
+                )
             }
         }
+    }
     
     override func textViewDidEndEditing(textView: UITextView) {
         super.textViewDidEndEditing(textView)
         iCloudUpdate()
     }
-        
-        
-        
-        
-        
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            ckQandARecord = CKRecord(recordType: Cloud.Entity.QandA)
-        }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    
+    
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        ckQandARecord = CKRecord(recordType: Cloud.Entity.QandA)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
