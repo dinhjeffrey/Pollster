@@ -7,89 +7,193 @@
 //
 
 import UIKit
+import CloudKit
 
 class AllQandAsTableViewController: UITableViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+    // MARK: Model
+    
+    var allQandAs = [CKRecord]() { didSet { tableView.reloadData() } }
+    
+    // MARK: View Controller Lifecycle
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchAllQandAs()
+        iCloudSubscribeToQandAs()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        iCloudUnsubscribeToQandAs()
     }
-
-    // MARK: - Table view data source
-
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+    
+    // MARK: Private Implementation
+    
+    private let database = CKContainer.defaultContainer().publicCloudDatabase
+    
+    private func fetchAllQandAs() {
+        let predicate = NSPredicate(format: "TRUEPREDICATE")
+        let query = CKQuery(recordType: Cloud.Entity.QandA, predicate: predicate)
+        query.sortDescriptors = [NSSortDescriptor(key: Cloud.Attribute.Question, ascending: true)]
+        database.performQuery(query, inZoneWithID: nil) { (records, error) in
+            if records != nil {
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.allQandAs = records!
+                }
+            }
+        }
     }
-
+    
+    // MARK: Subscription
+    
+    private let subscriptionID = "All QandA Creations and Deletions"
+    private var cloudKitObserver: NSObjectProtocol?
+    
+    private func iCloudSubscribeToQandAs() {
+        let predicate = NSPredicate(format: "TRUEPREDICATE")
+        let subscription = CKSubscription(
+            recordType: Cloud.Entity.QandA,
+            predicate: predicate,
+            subscriptionID: self.subscriptionID,
+            options: [.FiresOnRecordCreation, .FiresOnRecordDeletion]
+        )
+        // subscription.notificationInfo = ...
+        database.saveSubscription(subscription) { (savedSubscription, error) in
+            if error?.code == CKErrorCode.ServerRejectedRequest.rawValue {
+                // ignore
+            } else if error != nil {
+                // report
+            }
+        }
+        cloudKitObserver = NSNotificationCenter.defaultCenter().addObserverForName(
+            CloudKitNotifications.NotificationReceived,
+            object: nil,
+            queue: NSOperationQueue.mainQueue(),
+            usingBlock: { notification in
+                if let ckqn = notification.userInfo?[CloudKitNotifications.NotificationKey] as? CKQueryNotification {
+                    self.iCloudHandleSubscriptionNotification(ckqn)
+                }
+            }
+        )
+    }
+    
+    private func iCloudUnsubscribeToQandAs() {
+        if let observer = cloudKitObserver {
+            NSNotificationCenter.defaultCenter().removeObserver(observer)
+            cloudKitObserver = nil
+        }
+        database.deleteSubscriptionWithID(self.subscriptionID) { (subscription, error) in
+            // handle it
+        }
+    }
+    
+    private func iCloudHandleSubscriptionNotification(ckqn: CKQueryNotification) {
+        if ckqn.subscriptionID == self.subscriptionID {
+            if let recordID = ckqn.recordID {
+                switch ckqn.queryNotificationReason {
+                case .RecordCreated:
+                    database.fetchRecordWithID(recordID) { (record, error) in
+                        if record != nil {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                self.allQandAs = (self.allQandAs + [record!]).sort {
+                                    return $0.question < $1.question
+                                }
+                            }
+                        }
+                    }
+                case .RecordDeleted:
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.allQandAs = self.allQandAs.filter { $0.recordID != recordID }
+                    }
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    // MARK: UITableViewDataSource
+    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return allQandAs.count
     }
-
-    /*
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCellWithIdentifier("QandA Cell", forIndexPath: indexPath)
+        cell.textLabel?.text = allQandAs[indexPath.row].question
         return cell
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
+    
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        return allQandAs[indexPath.row].wasCreatedByThisUser
     }
-    */
-
-    /*
-    // Override to support editing the table view.
+    
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+            let record = allQandAs[indexPath.row]
+            database.deleteRecordWithID(record.recordID) { (deletedRecord, error) in
+                // handle errors
+            }
+            allQandAs.removeAtIndex(indexPath.row)
+        }
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
+    // MARK: Navigation
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "Show QandA" {
+            if let ckQandATVC = segue.destinationViewController as? CloudQandATableViewController {
+                if let cell = sender as? UITableViewCell, let indexPath = tableView.indexPathForCell(cell) {
+                    ckQandATVC.ckQandARecord = allQandAs[indexPath.row]
+                } else {
+                    ckQandATVC.ckQandARecord = CKRecord(recordType: Cloud.Entity.QandA)
+                }
+            }
+        }
     }
-    */
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }

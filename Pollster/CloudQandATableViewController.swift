@@ -75,13 +75,7 @@ class CloudQandATableViewController: QandATableViewController {
     
     
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        ckQandARecord = CKRecord(recordType: Cloud.Entity.QandA)
-    }
-    
-    
+
     
     
     

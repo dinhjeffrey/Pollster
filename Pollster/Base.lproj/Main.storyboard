@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="LvU-Jz-z0T">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="L6j-YN-A8n">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -22,7 +22,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pHa-D6-QyG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1631" y="355"/>
+            <point key="canvasLocation" x="1785" y="402"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="1bE-QQ-Lec">
@@ -42,16 +42,16 @@
             </objects>
             <point key="canvasLocation" x="381" y="343"/>
         </scene>
-        <!--Table View Controller-->
+        <!--All Qand As Table View Controller-->
         <scene sceneID="mmL-Zc-flH">
             <objects>
-                <tableViewController id="MB9-se-vSK" sceneMemberID="viewController">
+                <tableViewController id="MB9-se-vSK" customClass="AllQandAsTableViewController" customModule="Pollster" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="HqO-QP-KSv">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="Kon-eL-bXY" style="IBUITableViewCellStyleDefault" id="26w-Mc-HQ8">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="QandA Cell" textLabel="Kon-eL-bXY" style="IBUITableViewCellStyleDefault" id="26w-Mc-HQ8">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="26w-Mc-HQ8" id="65c-LH-OW5">
@@ -67,6 +67,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="LvU-Jz-z0T" kind="show" identifier="Show QandA" id="8xs-iE-Xqb"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -74,11 +77,20 @@
                             <outlet property="delegate" destination="MB9-se-vSK" id="KyS-t6-E1U"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="Srg-Mn-M9s"/>
+                    <navigationItem key="navigationItem" id="Srg-Mn-M9s">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="E5G-TP-O7e">
+                            <connections>
+                                <segue destination="LvU-Jz-z0T" kind="show" identifier="Show QandA" id="BOr-vg-EJB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ior-ku-5b7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="959" y="416"/>
+            <point key="canvasLocation" x="1100" y="410"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="8xs-iE-Xqb"/>
+    </inferredMetricsTieBreakers>
 </document>
